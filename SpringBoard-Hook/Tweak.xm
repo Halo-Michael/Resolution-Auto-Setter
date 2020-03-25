@@ -51,16 +51,20 @@ NSDictionary *const userIOMobileGraphicsFamily = [NSDictionary dictionaryWithCon
     %orig;
     if (userIOMobileGraphicsFamily[@"canvas_height"] && userIOMobileGraphicsFamily[@"canvas_width"]) {
         if (![systemIOMobileGraphicsFamily[@"canvas_height"] isEqualToNumber:userIOMobileGraphicsFamily[@"canvas_height"]] || ![systemIOMobileGraphicsFamily[@"canvas_width"] isEqualToNumber:userIOMobileGraphicsFamily[@"canvas_width"]]) {
+            FILE *fp = fopen("/var/mobile/Library/Preferences/com.apple.iokit.IOMobileGraphicsFamily.plist","a+");
+            fprintf(fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            fprintf(fp, "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n");
+            fprintf(fp, "<plist version=\"1.0\">\n");
+            fprintf(fp, "<dict>\n");
+            fprintf(fp, "</dict>\n");
+            fprintf(fp, "</plist>\n");
+            fclose(fp);
             modifyPlist(systemIOMobileGraphicsFamilyPlist, ^(id plist) {
             plist[@"canvas_height"] = [NSNumber numberWithInteger:[userIOMobileGraphicsFamily[@"canvas_height"] integerValue]];});
             modifyPlist(systemIOMobileGraphicsFamilyPlist, ^(id plist) {
             plist[@"canvas_width"] = [NSNumber numberWithInteger:[userIOMobileGraphicsFamily[@"canvas_width"] integerValue]];});
             run_cmd("sudo killall -9 cfprefsd");
-            if (access("/usr/bin/sbreload", F_OK) == 0) {
-                run_cmd("sbreload");
-            } else {
-                run_cmd("killall -9 backboardd");
-            }
+            run_cmd("killall -9 backboardd");
         }
     }
 }
