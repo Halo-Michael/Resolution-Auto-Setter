@@ -23,13 +23,12 @@ int main()
         printf("Run this as root!\n");
         exit(1);
     }
+
+    NSString *const userIOMobileGraphicsFamilyPlist = @"/var/mobile/Library/Preferences/com.michael.iokit.IOMobileGraphicsFamily.plist";
+    NSDictionary *const userIOMobileGraphicsFamily = [NSDictionary dictionaryWithContentsOfFile:userIOMobileGraphicsFamilyPlist];
     
-    if (access("/.cydia_no_stash", F_OK) != 0) {
-        FILE *fp = fopen("/.firstboot","a+");
-        fclose(fp);
-        if (access("/var/mobile/Library/Preferences/com.michael.iokit.IOMobileGraphicsFamily.plist", F_OK) == 0) {
-            remove("/var/mobile/Library/Preferences/com.apple.iokit.IOMobileGraphicsFamily.plist");
-        }
+    if (userIOMobileGraphicsFamily[@"canvas_height"] && userIOMobileGraphicsFamily[@"canvas_width"]) {
+        remove("/var/mobile/Library/Preferences/com.apple.iokit.IOMobileGraphicsFamily.plist");
     }
     return 0;
 }

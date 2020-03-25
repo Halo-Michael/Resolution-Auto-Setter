@@ -1,4 +1,4 @@
-TARGET = iphone:clang::13.0
+TARGET = iphone:clang::11.0
 ARCHS = arm64 arm64e
 DEBUG = 0
 
@@ -8,7 +8,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = AAAAAResSetter
 
-AAAAAResSetter_FILES = Tweak.xm
-AAAAAResSetter_CFLAGS = -fobjc-arc
+$(TWEAK_NAME)_FILES = Tweak.xm
+$(TWEAK_NAME)_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk

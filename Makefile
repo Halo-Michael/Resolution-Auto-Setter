@@ -1,6 +1,6 @@
 TARGET = Resolution-Auto-Setter
-VERSION = 0.1.0
-CC = xcrun -sdk iphoneos clang -arch arm64 -arch arm64e -miphoneos-version-min=13.0
+VERSION = 0.1.2
+CC = xcrun -sdk iphoneos clang -arch arm64 -arch arm64e -miphoneos-version-min=11.0
 LDID = ldid
 
 .PHONY: all clean
@@ -11,7 +11,7 @@ all: clean restoreres springboard-hook postinst prerm
 	cp control layout/DEBIAN/postinst layout/DEBIAN/prerm com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
-	cp etc/rc.d/restoreres com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
+	cp etc/rc.d/.theos/obj/restoreres com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
 	chmod 0755 com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d/restoreres
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library/MobileSubstrate
@@ -20,9 +20,7 @@ all: clean restoreres springboard-hook postinst prerm
 	dpkg -b com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm
 
 restoreres: clean
-	$(CC) etc/rc.d/restoreres.c -o etc/rc.d/restoreres
-	strip etc/rc.d/restoreres
-	$(LDID) -Sentitlements.xml etc/rc.d/restoreres
+	bash make-restoreres.sh
 
 springboard-hook: clean
 	bash make-springboard-hook.sh
@@ -38,6 +36,4 @@ prerm: clean
 	$(LDID) -Sentitlements.xml layout/DEBIAN/prerm
 
 clean:
-	rm -rf com.michael.resolutionautosetter*
-	rm -rf SpringBoard-Hook/.theos
-	rm -f etc/rc.d/restoreres layout/DEBIAN/postinst layout/DEBIAN/prerm
+	rm -rf com.michael.resolutionautosetter* SpringBoard-Hook/.theos etc/rc.d/.theos layout/DEBIAN/postinst layout/DEBIAN/prerm
