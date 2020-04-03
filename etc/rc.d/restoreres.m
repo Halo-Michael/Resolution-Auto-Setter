@@ -1,27 +1,16 @@
-#include <spawn.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-extern char **environ;
-
-int run_cmd(char *cmd)
-{
-    pid_t pid;
-    char *argv[] = {"sh", "-c", cmd, NULL};
-    int status = posix_spawn(&pid, "/bin/sh", NULL, NULL, argv, environ);
-    if (status == 0) {
-        if (waitpid(pid, &status, 0) == -1) {
-            perror("waitpid");
-        }
-    }
-    return status;
-}
 
 int main()
 {
-    if (geteuid() != 0) {
-        printf("Run this as root!\n");
-        exit(1);
+    if (getuid() != 0) {
+        setuid(0);
+    }
+    
+    if (getuid() != 0) {
+        printf("Can't set uid as 0.\n");
+        return 1;
     }
 
     NSString *const userIOMobileGraphicsFamilyPlist = @"/var/mobile/Library/Preferences/com.michael.iokit.IOMobileGraphicsFamily.plist";

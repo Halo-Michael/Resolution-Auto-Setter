@@ -1,14 +1,14 @@
 TARGET = Resolution-Auto-Setter
-VERSION = 0.2.1
+VERSION = 0.3.0
 CC = xcrun -sdk iphoneos clang -arch arm64 -arch arm64e -miphoneos-version-min=11.0
 LDID = ldid
 
 .PHONY: all clean
 
-all: clean restoreres springboard-hook postinst prerm
+all: clean restoreres springboard-hook postinst
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
-	cp control layout/DEBIAN/postinst layout/DEBIAN/prerm com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
+	cp control layout/DEBIAN/postinst com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
 	cp etc/rc.d/.theos/obj/restoreres com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
@@ -30,10 +30,5 @@ postinst: clean
 	strip layout/DEBIAN/postinst
 	$(LDID) -Sentitlements.xml layout/DEBIAN/postinst
 
-prerm: clean
-	$(CC) layout/DEBIAN/prerm.c -o layout/DEBIAN/prerm
-	strip layout/DEBIAN/prerm
-	$(LDID) -Sentitlements.xml layout/DEBIAN/prerm
-
 clean:
-	rm -rf com.michael.resolutionautosetter* SpringBoard-Hook/.theos etc/rc.d/.theos layout/DEBIAN/postinst layout/DEBIAN/prerm
+	rm -rf com.michael.resolutionautosetter* SpringBoard-Hook/.theos etc/rc.d/.theos layout/DEBIAN/postinst
