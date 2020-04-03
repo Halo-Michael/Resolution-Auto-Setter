@@ -4,15 +4,6 @@
 
 int main()
 {
-    if (getuid() != 0) {
-        setuid(0);
-    }
-    
-    if (getuid() != 0) {
-        printf("Can't set uid as 0.\n");
-        return 1;
-    }
-
     NSString *const userIOMobileGraphicsFamilyPlist = @"/var/mobile/Library/Preferences/com.michael.iokit.IOMobileGraphicsFamily.plist";
     NSDictionary *const userIOMobileGraphicsFamily = [NSDictionary dictionaryWithContentsOfFile:userIOMobileGraphicsFamilyPlist];
     

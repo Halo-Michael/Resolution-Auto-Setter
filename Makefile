@@ -5,10 +5,10 @@ LDID = ldid
 
 .PHONY: all clean
 
-all: clean restoreres springboard-hook postinst
+all: clean restoreres springboard-hook
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
-	cp control layout/DEBIAN/postinst com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
+	cp control com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/DEBIAN
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
 	cp etc/rc.d/.theos/obj/restoreres com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/etc/rc.d
@@ -25,10 +25,5 @@ restoreres: clean
 springboard-hook: clean
 	bash make-springboard-hook.sh
 
-postinst: clean
-	$(CC) layout/DEBIAN/postinst.c -o layout/DEBIAN/postinst
-	strip layout/DEBIAN/postinst
-	$(LDID) -Sentitlements.xml layout/DEBIAN/postinst
-
 clean:
-	rm -rf com.michael.resolutionautosetter* SpringBoard-Hook/.theos etc/rc.d/.theos layout/DEBIAN/postinst
+	rm -rf com.michael.resolutionautosetter* SpringBoard-Hook/.theos etc/rc.d/.theos
