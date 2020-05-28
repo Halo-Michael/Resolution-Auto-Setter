@@ -7,9 +7,9 @@
     NSDictionary *const userIOMobileGraphicsFamily = [NSDictionary dictionaryWithContentsOfFile:userIOMobileGraphicsFamilyPlist];
     if (userIOMobileGraphicsFamily[@"canvas_height"] && userIOMobileGraphicsFamily[@"canvas_width"]) {
         if (![systemIOMobileGraphicsFamily[@"canvas_height"] isEqualToNumber:userIOMobileGraphicsFamily[@"canvas_height"]] || ![systemIOMobileGraphicsFamily[@"canvas_width"] isEqualToNumber:userIOMobileGraphicsFamily[@"canvas_width"]]) {
-            system("suer mv /Library/MobileSubstrate/DynamicLibraries/AAAAAResSetter.dylib /Library/MobileSubstrate/DynamicLibraries/AAAAAResSetter.disabled");
             system([NSString stringWithFormat:@"res %@ %@ -y", userIOMobileGraphicsFamily[@"canvas_height"], userIOMobileGraphicsFamily[@"canvas_width"]].UTF8String);
         }
     }
+    system("suer mv /Library/MobileSubstrate/DynamicLibraries/AAAAAResSetter.dylib /Library/MobileSubstrate/DynamicLibraries/AAAAAResSetter.disabled");
 }
 %end
