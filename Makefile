@@ -19,7 +19,7 @@ all: clean postinst restoreres autoSetResolution autoRestoreResolution
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library/MobileSubstrate
 	mkdir com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library/MobileSubstrate/DynamicLibraries
-	mv autoSetResolution/.theos/obj/AAAAAsetRes.dylib autoSetResolution/AAAAAsetRes.plist autoRestoreResolution/.theos/obj/restoreRes.dylib autoRestoreResolution/restoreRes.plist com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library/MobileSubstrate/DynamicLibraries
+	cp autoSetResolution/.theos/obj/AAAAAsetRes.dylib autoSetResolution/AAAAAsetRes.plist autoRestoreResolution/.theos/obj/restoreRes.dylib autoRestoreResolution/restoreRes.plist com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library/MobileSubstrate/DynamicLibraries
 	touch com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm/Library/MobileSubstrate/DynamicLibraries/AAAAAResSetter.disabled
 	dpkg -b com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm
 
