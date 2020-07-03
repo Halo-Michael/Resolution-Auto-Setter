@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 int main()
 {
     if (getuid() != 0) {

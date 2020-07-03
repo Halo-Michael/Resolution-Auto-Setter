@@ -1,9 +1,3 @@
-TARGET = iphone:clang::11.0
-ARCHS = arm64 arm64e
-DEBUG = 0
-
-INSTALL_TARGET_PROCESSES = SpringBoard
-
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = restoreRes
