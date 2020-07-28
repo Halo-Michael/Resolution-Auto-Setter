@@ -1,8 +1,8 @@
 #import <notify.h>
 
 static void deviceWillShutDown(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    NSDictionary *const userIOMobileGraphicsFamily = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.michael.iokit.IOMobileGraphicsFamily.plist"];
-    if (userIOMobileGraphicsFamily[@"canvas_height"] && userIOMobileGraphicsFamily[@"canvas_width"]) {
+    CFArrayRef userIOMobileGraphicsFamily = CFPreferencesCopyKeyList(CFSTR("com.michael.iokit.IOMobileGraphicsFamily"), CFSTR("mobile"), kCFPreferencesAnyHost);
+    if ([(__bridge NSArray *)userIOMobileGraphicsFamily containsObject:@"canvas_height"] && [(__bridge NSArray *)userIOMobileGraphicsFamily containsObject:@"canvas_width"]) {
         remove("/var/mobile/Library/Preferences/com.apple.iokit.IOMobileGraphicsFamily.plist");
     }
 }
@@ -10,11 +10,13 @@ static void deviceWillShutDown(CFNotificationCenterRef center, void *observer, C
 %hook SpringBoard
 -(void)applicationDidFinishLaunching:(id)application {
     %orig;
-    NSDictionary *const systemIOMobileGraphicsFamily = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.apple.iokit.IOMobileGraphicsFamily.plist"];
-    NSDictionary *const userIOMobileGraphicsFamily = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.michael.iokit.IOMobileGraphicsFamily.plist"];
-    if (userIOMobileGraphicsFamily[@"canvas_height"] && userIOMobileGraphicsFamily[@"canvas_width"]) {
-        if (![systemIOMobileGraphicsFamily[@"canvas_height"] isEqualToNumber:userIOMobileGraphicsFamily[@"canvas_height"]] || ![systemIOMobileGraphicsFamily[@"canvas_width"] isEqualToNumber:userIOMobileGraphicsFamily[@"canvas_width"]]) {
-            system([NSString stringWithFormat:@"res %@ %@ -y", userIOMobileGraphicsFamily[@"canvas_height"], userIOMobileGraphicsFamily[@"canvas_width"]].UTF8String);
+    CFArrayRef systemIOMobileGraphicsFamily = CFPreferencesCopyKeyList(CFSTR("com.apple.iokit.IOMobileGraphicsFamily"), CFSTR("mobile"), kCFPreferencesAnyHost);
+    CFArrayRef userIOMobileGraphicsFamily = CFPreferencesCopyKeyList(CFSTR("com.michael.iokit.IOMobileGraphicsFamily"), CFSTR("mobile"), kCFPreferencesAnyHost);
+    if ([(__bridge NSArray *)userIOMobileGraphicsFamily containsObject:@"canvas_height"] && [(__bridge NSArray *)userIOMobileGraphicsFamily containsObject:@"canvas_width"]) {
+        NSDictionary *systemSettings = (NSDictionary *)CFBridgingRelease(CFPreferencesCopyMultiple(systemIOMobileGraphicsFamily, CFSTR("com.apple.iokit.IOMobileGraphicsFamily"), CFSTR("mobile"), kCFPreferencesAnyHost));
+        NSDictionary *userSettings = (NSDictionary *)CFBridgingRelease(CFPreferencesCopyMultiple(userIOMobileGraphicsFamily, CFSTR("com.michael.iokit.IOMobileGraphicsFamily"), CFSTR("mobile"), kCFPreferencesAnyHost));
+        if (![systemSettings[@"canvas_height"] isEqualToNumber:userSettings[@"canvas_height"]] || ![systemSettings[@"canvas_width"] isEqualToNumber:userSettings[@"canvas_width"]]) {
+            system([[NSString stringWithFormat:@"res %@ %@ -y", userSettings[@"canvas_height"], userSettings[@"canvas_width"]] UTF8String]);
         }
     }
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, deviceWillShutDown, CFSTR("com.apple.springboard.deviceWillShutDown"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);

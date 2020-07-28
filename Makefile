@@ -1,7 +1,7 @@
 export TARGET = iphone:clang:13.0:11.0
 export ARCHS = arm64 arm64e
 export DEBUG = no
-export VERSION = 0.4.1
+export VERSION = 0.4.2
 CC = xcrun -sdk ${THEOS}/sdks/iPhoneOS13.0.sdk clang -arch arm64 -arch arm64e -miphoneos-version-min=11.0
 LDID = ldid
 
