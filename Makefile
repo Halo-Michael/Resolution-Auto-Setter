@@ -1,8 +1,8 @@
 export TARGET = iphone:clang:13.0:11.0
 export ARCHS = arm64 arm64e
 export DEBUG = no
-export VERSION = 0.4.2
-CC = xcrun -sdk ${THEOS}/sdks/iPhoneOS13.0.sdk clang -arch arm64 -arch arm64e -miphoneos-version-min=11.0
+export VERSION = 0.4.3
+CC = xcrun -sdk ${THEOS}/sdks/iPhoneOS13.0.sdk clang -arch arm64 -arch arm64e -miphoneos-version-min=11.0 -framework CoreFoundation
 LDID = ldid
 
 .PHONY: all clean
@@ -23,7 +23,7 @@ all: clean restoreres autoSetResolution
 	dpkg -b com.michael.resolutionautosetter_$(VERSION)_iphoneos-arm
 
 restoreres: clean
-	$(CC) -fobjc-arc restoreres.m -o restoreres
+	$(CC) restoreres.c -o restoreres
 	strip restoreres
 	$(LDID) -Sentitlements.xml restoreres
 
