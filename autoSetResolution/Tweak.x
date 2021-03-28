@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 #include <removefile.h>
 
 %hook SpringBoard
